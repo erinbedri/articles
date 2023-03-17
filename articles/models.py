@@ -28,10 +28,9 @@ class Article(models.Model):
     title = models.CharField(max_length=150)
     topic = models.CharField(max_length=ARTICLE_TOPICS_MAX_LENGTH, choices=ARTICLE_TOPICS)
     content = models.TextField(max_length=2500)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.title
-
+        return f'{self.title} by {self.author}'

@@ -1,1 +1,12 @@
-<h1>Article List</h1>
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Article List</h2>
+
+    <ul>
+        {% for article in article_list %}
+            <li><a href={% url 'articles:article_detail' article.id %}>{{ article.title }}</a> by {{ article.owner }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
