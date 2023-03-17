@@ -1,50 +1,36 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy, reverse
-from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
-
+from django.urls import reverse_lazy
 from articles.models import Article
+from articles.owner import OwnerListView, OwnerDetailView, OwnerCreateView, OwnerUpdateView, OwnerDeleteView
 
 
-class ArticleListView(ListView):
+class ArticleListView(OwnerListView):
     model = Article
     queryset = Article.objects.all().order_by('-created_at')
 
 
-class ArticleDetailView(DetailView):
+class ArticleDetailView(OwnerDetailView):
     model = Article
 
 
-class ArticleCreateView(LoginRequiredMixin, CreateView):
+class ArticleCreateView(OwnerCreateView):
+    model = Article
+    fields = ('title', 'topic', 'content')
+
+    def get_success_url(self):
+        return reverse_lazy('articles:article_detail', kwargs={'slug': self.object.slug})
+
+
+class ArticleUpdateView(OwnerUpdateView):
     model = Article
     fields = ('title', 'topic', 'content')
 
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        return super().form_valid(form)
+    def get_success_url(self):
+        return reverse_lazy('articles:article_detail', kwargs={'slug': self.object.slug})
+
+
+class ArticleDeleteView(OwnerDeleteView):
+    model = Article
 
     def get_success_url(self):
-        return reverse('articles:article_detail', kwargs={'slug': self.object.slug})
-
-
-class ArticleUpdateView(LoginRequiredMixin, UpdateView):
-    model = Article
-    fields = ('title', 'topic', 'content')
-    success_url = reverse_lazy('articles:article_list')
-
-    def get_queryset(self):
-        qs = super(ArticleUpdateView, self).get_queryset()
-        return qs.filter(author=self.request.user)
-
-    def get_success_url(self):
-        return reverse('articles:article_detail', kwargs={'slug': self.object.slug})
-
-
-class ArticleDeleteView(LoginRequiredMixin, DeleteView):
-    model = Article
-    success_url = reverse_lazy('articles:article_list')
-
-    def get_queryset(self):
-        qs = super(ArticleDeleteView, self).get_queryset()
-        return qs.filter(author=self.request.user)
-
+        return reverse_lazy('articles:article_list')
 
