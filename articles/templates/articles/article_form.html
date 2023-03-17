@@ -1,9 +1,10 @@
-{% extends 'base.html' %}
+{% extends 'common/base.html' %}
 {% load crispy_forms_tags %}
 
 {% block content %}
     <form method="post">{% csrf_token %}
         {{ form|crispy }}
-        <input type="submit" value="Update">
+        <input type="submit" value="Update" class="btn btn-info">
+        <a class="btn btn-info" href={% url 'articles:article_list' %}>Cancel</a>
     </form>
 {% endblock %}

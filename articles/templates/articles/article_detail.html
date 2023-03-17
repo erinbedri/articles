@@ -1,11 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'common/base.html' %}
 
 {% block content %}
-    <h2>Article Detail</h2>
-
-    <h3>Title: {{ article.title }}</h3>
-    <h4>Author: {{ article.author }}</h4>
-    <h4>Published: {{ article.created_at }}</h4>
-    <h4>Topic: {{ article.topic }}</h4>
+    <h3>{{ article.title }}</h3>
+    <h5>by {{ article.author }}</h5>
+    <p>{{ article.created_at }}</p>
+    <p class="badge bg-secondary">{{ article.topic }}</p>
     <p>{{ article.content|linebreaksbr }}</p>
 {% endblock %}

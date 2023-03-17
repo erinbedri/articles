@@ -15,6 +15,7 @@ class ArticleDetailView(OwnerDetailView):
 class ArticleCreateView(OwnerCreateView):
     model = Article
     fields = ('title', 'topic', 'content')
+    template_name = 'articles/article_create_form.html'
 
     def get_success_url(self):
         return reverse_lazy('articles:article_detail', kwargs={'slug': self.object.slug})
