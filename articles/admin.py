@@ -4,6 +4,9 @@ from articles.models import Article
 
 
 class ArticleAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('title', 'author', 'topic', 'created_at', 'updated_at')
+    prepopulated_fields = {'slug': ('title',)}
+
+
 admin.site.register(Article, ArticleAdmin)
 
