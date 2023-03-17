@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
+from django.utils.text import slugify
 
 User = get_user_model()
 
@@ -33,6 +34,10 @@ class Article(models.Model):
     slug = models.SlugField(null=False, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super(Article, self).save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.title} by {self.author}'
