@@ -31,6 +31,10 @@ class ArticleUpdateView(LoginRequiredMixin, UpdateView):
     fields = ('title', 'topic', 'content')
     success_url = reverse_lazy('articles:article_list')
 
+    def get_queryset(self):
+        qs = super(ArticleUpdateView, self).get_queryset()
+        return qs.filter(author=self.request.user)
+
     def get_success_url(self):
         return reverse('articles:article_detail', kwargs={'slug': self.object.slug})
 
@@ -38,5 +42,9 @@ class ArticleUpdateView(LoginRequiredMixin, UpdateView):
 class ArticleDeleteView(LoginRequiredMixin, DeleteView):
     model = Article
     success_url = reverse_lazy('articles:article_list')
+
+    def get_queryset(self):
+        qs = super(ArticleDeleteView, self).get_queryset()
+        return qs.filter(author=self.request.user)
 
 

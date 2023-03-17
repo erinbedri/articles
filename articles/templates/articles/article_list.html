@@ -13,7 +13,7 @@
                 <a href={% url 'articles:article_detail' article.slug %}>{{ article.title }}</a>
                 by {{ article.author }}
 
-                {% if user.is_authenticated %}
+                {% if user.is_authenticated and user.id == article.author.id %}
                     <a href={% url 'articles:article_edit' article.slug %}>[Edit]</a>
                     <a href={% url 'articles:article_delete' article.slug %}>[Delete]</a>
                 {% endif %}
