@@ -1,9 +1,32 @@
 {% extends 'common/navigation.html' %}
+{% load crispy_forms_tags %}
 
 {% block content %}
     <h3>{{ article.title }}</h3>
-    <h5>by {{ article.author }}</h5>
+    <h5>by {{ article.owner }}</h5>
     <p>{{ article.created_at }}</p>
     <p class="badge bg-secondary">{{ article.topic }}</p>
     <p>{{ article.content|linebreaksbr }}</p>
+
+    {% if user.is_authenticated %}
+        <div class="mt-5 mb-5">
+            <form method="post" action={% url 'articles:article_comment_create' article.slug %}>
+                {% csrf_token %}
+                {{ comment_form|crispy }}
+                <input class="btn btn-info" type="submit" value="Submit">
+                <a class="btn btn-info" href={% url 'articles:article_list' %}>All Articles</a>
+            </form>
+        </div>
+    {% endif %}
+
+    {% for comment in comments %}
+        <p><b>{{ comment.owner }}:</b> {{ comment.text }} ({{ comment.created_at|timesince }} ago)
+            {% if user == comment.owner %}
+                <a href={% url 'articles:article_comment_delete' comment.id %}>[delete]
+                </a>
+            {% endif %}
+        </p>
+    {% empty %}
+        <p>There are no comments yet!</p>
+    {% endfor %}
 {% endblock %}

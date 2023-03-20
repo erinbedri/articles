@@ -5,9 +5,9 @@
         {% for article in article_list %}
             <li>
                 <a href={% url 'articles:article_detail' article.slug %}>{{ article.title }}</a>
-                by {{ article.author }}
+                by {{ article.owner }}
 
-                {% if user.is_authenticated and user.id == article.author.id %}
+                {% if user.is_authenticated and user.id == article.owner.id %}
                     <a href={% url 'articles:article_edit' article.slug %}>[Edit]</a>
                     <a href={% url 'articles:article_delete' article.slug %}>[Delete]</a>
                 {% endif %}

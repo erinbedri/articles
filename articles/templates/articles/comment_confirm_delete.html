@@ -1,0 +1,10 @@
+{% extends 'common/navigation.html' %}
+
+{% block content %}
+    <form method="post">{% csrf_token %}
+        <p>Are you sure you want to delete "{{ comment.text }}"?</p>
+        {{ form }}
+        <input class="btn btn-info" type="submit" value="Confirm">
+        <a class="btn btn-info" href={% url 'articles:article_detail' comment.article.slug %}>Cancel</a>
+    </form>
+{% endblock %}
