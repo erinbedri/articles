@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views import View
@@ -10,7 +11,16 @@ from articles.owner import OwnerListView, OwnerDetailView, OwnerCreateView, Owne
 
 class ArticleListView(OwnerListView):
     model = Article
-    queryset = Article.objects.all().order_by('-created_at')
+
+    def get_queryset(self):
+        qs = self.model.objects.all().order_by("-created_at")
+        search = self.request.GET.get('search')
+
+        if search:
+            query = Q(title__icontains=search)
+            query.add(Q(content__icontains=search), Q.OR)
+            qs = qs.filter(query).select_related().order_by("-created_at")
+        return qs
 
 
 class ArticleDetailView(OwnerDetailView):
